@@ -68,6 +68,8 @@ export const Menu = styled.ul`
     border-radius: 6px;
     cursor: pointer;
 
+    margin-left: 1rem;
+
     transition: 0.2s ease-in-out;
 
     &:hover {

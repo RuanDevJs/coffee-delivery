@@ -174,7 +174,8 @@ export const Quantity = styled.div`
   }
 `;
 
-export const ShoppingCart = styled.div`
+export const ShoppingCart = styled.button`
+  border: 0;
   display: flex;
 
   background-color: ${({ theme }) => theme.colors["purple-dark"]};

@@ -6,7 +6,7 @@ import { Global } from "./theme/styles/global";
 
 import { ThemeProvider } from "styled-components";
 import theme from "./theme";
-import { ShoppingProvider } from "./context/Shopping";
+import { ShoppingProvider } from "./context/Shopping/ShoppingContext";
 
 export default function App() {
   return (

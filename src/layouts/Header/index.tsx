@@ -26,11 +26,9 @@ export default function Intro() {
               <option value="Rio Grande do Sul" label="Rio Grande do Sul" />
             </select>
           </li>
-          <li id="shopping-cart">
-            <NavLink to="/checkout">
-              <ShoppingCart size={24} weight="fill" color="#C47F17" />
-            </NavLink>
-          </li>
+          <NavLink to="/checkout" id="shopping-cart">
+            <ShoppingCart size={24} weight="fill" color="#C47F17" />
+          </NavLink>
         </Styled.Menu>
       </Styled.Navigation>
     </Styled.Container>

@@ -1,13 +1,16 @@
-import { useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Minus, Plus, ShoppingCart } from "phosphor-react";
 import { CoffeeProps, Coffes } from "../../../../api";
 
 import * as Styled from "./styles";
-import { ShoppingContext } from "../../../../context/Shopping";
+import { ShoppingContext } from "../../../../context/Shopping/ShoppingContext";
 
 export default function Coffee() {
   const { addCoffeeInShoppingCart, removeCoffeeInShoppingCart, shopping_cart } =
     useContext(ShoppingContext);
+  const navigation = useNavigate();
 
   function handleAddCoffeeInShoppingCart(newCoffee: CoffeeProps) {
     addCoffeeInShoppingCart({
@@ -23,7 +26,17 @@ export default function Coffee() {
   function getQuantityById(_id: string) {
     const quantityById = shopping_cart.find((q) => q._id === _id);
 
+    // const findCoffeeIndexById = shopping_cart.findIndex((q) => q._id === _id);
+
     return quantityById && quantityById._id ? quantityById.quantity : 0;
+  }
+
+  function handleShoppintCartButton(coffee: CoffeeProps) {
+    addCoffeeInShoppingCart({
+      ...coffee,
+      quantity: 1,
+    });
+    navigation("/checkout");
   }
 
   return (
@@ -63,14 +76,15 @@ export default function Coffee() {
                       <Minus size={18} weight="fill" />
                     </button>
                     <span>{getQuantityById(coffee._id)}</span>
-
                     <button
                       onClick={() => handleAddCoffeeInShoppingCart(coffee)}
                     >
                       <Plus size={18} weight="fill" />
                     </button>
                   </Styled.Quantity>
-                  <Styled.ShoppingCart>
+                  <Styled.ShoppingCart
+                    onClick={() => handleShoppintCartButton(coffee)}
+                  >
                     <ShoppingCart size={18} weight="fill" />
                   </Styled.ShoppingCart>
                 </div>

@@ -11,6 +11,10 @@ function findCoffeeInShoppingCartById(
   return coffee !== undefined && coffee._id ? coffee : null;
 }
 
+function setShoppingCartInLocalStorage(shopping_cart: Coffee[]) {
+  localStorage.setItem("@coffee-delivery", JSON.stringify(shopping_cart));
+}
+
 export function ADD_COFFEE_IN_SHOPPING_CART(
   state: State,
   action: Dispatch
@@ -34,6 +38,7 @@ export function ADD_COFFEE_IN_SHOPPING_CART(
       }
     );
 
+    setShoppingCartInLocalStorage(updatedCoffeeQuantity);
     return updatedCoffeeQuantity;
   } else {
     return [...state.shopping_cart, action.payload.data];
@@ -64,6 +69,28 @@ export function REMOVE_COFFEE_IN_SHOPPING_CART(
     );
 
     return updatedCoffeeQuantity;
+  } else {
+    return [...state.shopping_cart, action.payload.data];
+  }
+}
+
+export function EXCLUDE_COFFEE_IN_SHOPPING_CART(
+  state: State,
+  action: Dispatch
+): Coffee[] {
+  const searchCoffeeInShoppingCart = findCoffeeInShoppingCartById(
+    state,
+    action.payload.data._id
+  );
+
+  if (searchCoffeeInShoppingCart && searchCoffeeInShoppingCart._id) {
+    const updatedShoppingCart: Coffee[] = state.shopping_cart.filter(
+      (coffee) => {
+        return coffee._id !== action.payload.data._id;
+      }
+    );
+
+    return updatedShoppingCart;
   } else {
     return [...state.shopping_cart, action.payload.data];
   }

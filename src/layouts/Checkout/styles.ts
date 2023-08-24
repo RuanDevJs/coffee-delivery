@@ -1,4 +1,3 @@
-import { ButtonHTMLAttributes } from "react";
 import styled, { css } from "styled-components";
 
 export const Container = styled.main`
@@ -9,6 +8,7 @@ export const Container = styled.main`
     "payment payment shopping";
 
   grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 300px 80px max-content;
   align-items: start;
   justify-content: space-between;
   padding: 2rem 3rem;
@@ -236,6 +236,11 @@ export const CoffeeFooter = styled.div`
     justify-content: center;
 
     border-radius: 6px 0 0 6px;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+      background-color: ${({ theme }) => theme.colors["base-hover"]};
+    }
   }
 
   .counter--plus {
@@ -252,6 +257,11 @@ export const CoffeeFooter = styled.div`
     justify-content: center;
 
     border-radius: 0 6px 6px 0;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+      background-color: ${({ theme }) => theme.colors["base-hover"]};
+    }
   }
 
   .counter--length {
@@ -283,6 +293,7 @@ export const CoffeeFooter = styled.div`
     background-color: ${({ theme }) => theme.colors["base-button"]};
 
     border-radius: 6px;
+    transition: 0.2s ease-in-out;
 
     span {
       font-size: 0.75rem;
@@ -290,6 +301,10 @@ export const CoffeeFooter = styled.div`
       color: ${({ theme }) => theme.colors["base-text"]};
 
       text-transform: uppercase;
+    }
+
+    &:hover {
+      background-color: ${({ theme }) => theme.colors["base-hover"]};
     }
   }
 `;
@@ -319,6 +334,12 @@ export const CoffeesFooter = styled.div`
 
       &:hover {
         background-color: ${theme.colors["yellow-dark"]};
+      }
+
+      &:disabled {
+        background-color: ${theme.colors["yellow"]};
+        opacity: 0.7;
+        cursor: no-drop;
       }
     `}
   }

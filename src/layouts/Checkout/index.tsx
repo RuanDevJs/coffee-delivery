@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { ShoppingContext } from "../../context/Shopping";
+import { ShoppingContext } from "../../context/Shopping/ShoppingContext";
 
 import {
   Bank,
@@ -14,8 +14,6 @@ import {
 
 import * as Styled from "./styles";
 import { useTheme } from "styled-components";
-
-import CoffeeIMG from "../../assets/coffee/Image-1.svg";
 
 interface FormCep {
   cep: string;
@@ -43,6 +41,7 @@ export default function Checkout() {
     calculateAllCoffeesInShoppingCart,
     addCoffeeInShoppingCart,
     removeCoffeeInShoppingCart,
+    excludeCoffeeInShoppingCart,
   } = useContext(ShoppingContext);
   const { shoppingCartTotalPrice } = calculateAllCoffeesInShoppingCart();
 
@@ -53,6 +52,8 @@ export default function Checkout() {
   const totalWithFreight =
     shoppingCartTotalPrice > 0 ? (shoppingCartTotalPrice + 3.5).toFixed(2) : 0;
   const theme = useTheme();
+
+  const isDisabled = shoppingCartTotalPrice > 0 ? false : true;
 
   useEffect(() => {
     async function getAddressInfoFromCEP() {
@@ -184,7 +185,10 @@ export default function Checkout() {
                         <Plus size={16} color={theme.colors.purple} />
                       </button>
 
-                      <button className="counter--remove">
+                      <button
+                        className="counter--remove"
+                        onClick={() => excludeCoffeeInShoppingCart(coffee)}
+                      >
                         <Trash size={16} color={theme.colors.purple} />
                         <span>Remover</span>
                       </button>
@@ -207,7 +211,17 @@ export default function Checkout() {
               <p>Total</p>
               <span>R$ {totalWithFreight}</span>
             </Styled.Row>
-            <button className="coffee-footer-button">Confirmar pedido</button>
+            <button
+              className="coffee-footer-button"
+              disabled={isDisabled}
+              title={
+                isDisabled
+                  ? "Por favor, seleciona uma quantidade válida de café"
+                  : "Confirmar pedido"
+              }
+            >
+              Confirmar pedido
+            </button>
           </Styled.CoffeesFooter>
         </Styled.Coffees>
       </Styled.ShoppingCart>
