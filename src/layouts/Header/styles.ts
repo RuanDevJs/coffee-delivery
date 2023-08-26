@@ -35,15 +35,18 @@ export const Menu = styled.ul`
   }
 
   #state-menu {
+    width: 160px;
+
     display: flex;
     align-items: center;
+    justify-content: center;
 
     background-color: ${({ theme }) => theme.colors["purple-light"]};
     padding: 8px;
 
     border-radius: 6px;
 
-    select {
+    span {
       border: 0;
       background-color: transparent;
       outline: 0;
@@ -51,6 +54,8 @@ export const Menu = styled.ul`
       cursor: pointer;
 
       color: ${({ theme }) => theme.colors["purple-dark"]};
+
+      padding: 0 8px;
     }
 
     cursor: pointer;

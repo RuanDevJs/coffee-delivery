@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Minus, Plus, ShoppingCart } from "phosphor-react";
@@ -24,11 +24,11 @@ export default function Coffee() {
   }
 
   function getQuantityById(_id: string) {
-    const quantityById = shopping_cart.find((q) => q._id === _id);
-
-    // const findCoffeeIndexById = shopping_cart.findIndex((q) => q._id === _id);
-
-    return quantityById && quantityById._id ? quantityById.quantity : 0;
+    if (shopping_cart && shopping_cart.length) {
+      const quantityById = shopping_cart?.find((q) => q._id === _id);
+      return quantityById && quantityById._id ? quantityById.quantity : 0;
+    }
+    return 0;
   }
 
   function handleShoppintCartButton(coffee: CoffeeProps) {

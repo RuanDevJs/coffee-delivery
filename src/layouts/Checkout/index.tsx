@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { ShoppingContext } from "../../context/Shopping/ShoppingContext";
+import { toast } from "react-toastify";
 
 import {
   Bank,
@@ -14,6 +15,8 @@ import {
 
 import * as Styled from "./styles";
 import { useTheme } from "styled-components";
+import { Order } from "../../context/Shopping/types";
+import { useNavigate } from "react-router-dom";
 
 interface FormCep {
   cep: string;
@@ -38,10 +41,12 @@ type PaymentMethod = "credit-card" | "debit-card" | "money";
 export default function Checkout() {
   const {
     shopping_cart,
+    setNewOrder,
     calculateAllCoffeesInShoppingCart,
     addCoffeeInShoppingCart,
     removeCoffeeInShoppingCart,
     excludeCoffeeInShoppingCart,
+    clearShoppingCart,
   } = useContext(ShoppingContext);
   const { shoppingCartTotalPrice } = calculateAllCoffeesInShoppingCart();
 
@@ -49,11 +54,37 @@ export default function Checkout() {
     useState<PaymentMethod>("credit-card");
 
   const [formCep, setFormCep] = useState<FormCep>({} as FormCep);
+  const [loadingFormCepFromStorage, setLoadingFormCepFromStorage] =
+    useState(true);
+
   const totalWithFreight =
     shoppingCartTotalPrice > 0 ? (shoppingCartTotalPrice + 3.5).toFixed(2) : 0;
   const theme = useTheme();
 
-  const isDisabled = shoppingCartTotalPrice > 0 ? false : true;
+  const isDisabled = shoppingCartTotalPrice > 0 && formCep.cep ? false : true;
+  const navigation = useNavigate();
+
+  useEffect(() => {
+    const formCepFromLocalStorage = localStorage.getItem(
+      "@coffee-delivery:form-cep"
+    );
+
+    const paymentFromLocalStorage = localStorage.getItem(
+      "@coffee-delivery:payment-method"
+    );
+
+    if (formCepFromLocalStorage) {
+      const parsedFormCepFromLocalStorage = JSON.parse(formCepFromLocalStorage);
+      setFormCep(parsedFormCepFromLocalStorage);
+    }
+
+    if (paymentFromLocalStorage) {
+      const parsedFormCepFromLocalStorage = JSON.parse(paymentFromLocalStorage);
+      setPaymentMethod(parsedFormCepFromLocalStorage);
+    }
+
+    setLoadingFormCepFromStorage(false);
+  }, []);
 
   useEffect(() => {
     async function getAddressInfoFromCEP() {
@@ -73,11 +104,39 @@ export default function Checkout() {
     if (formCep.cep && formCep.cep.length === 8) {
       getAddressInfoFromCEP();
     }
+
+    localStorage.setItem("@coffee-delivery:form-cep", JSON.stringify(formCep));
   }, [formCep]);
 
   function activeButton(method: PaymentMethod) {
     setPaymentMethod(method);
+    localStorage.setItem(
+      "@coffee-delivery:payment-method",
+      JSON.stringify(method)
+    );
   }
+
+  function handleSubmit() {
+    if (!formCep.complement.length || formCep.number === 0) {
+      return toast("Preencha os restos dos dados do seu endereço 😠", {
+        type: "error",
+        pauseOnHover: false,
+      });
+    }
+
+    const newOrder: Order = {
+      address: formCep,
+      coffees: shopping_cart,
+      payment_method: paymentMethod,
+    };
+
+    setNewOrder(newOrder);
+    clearShoppingCart();
+
+    navigation("/success");
+  }
+
+  if (loadingFormCepFromStorage) return null;
 
   return (
     <Styled.Container>
@@ -219,6 +278,7 @@ export default function Checkout() {
                   ? "Por favor, seleciona uma quantidade válida de café"
                   : "Confirmar pedido"
               }
+              onClick={handleSubmit}
             >
               Confirmar pedido
             </button>

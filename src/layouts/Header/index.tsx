@@ -19,12 +19,7 @@ export default function Intro() {
         <Styled.Menu>
           <li id="state-menu">
             <MapPin color="#8047F8" size={24} weight="fill" />
-            <select name="state" id="state-input">
-              <option value="Minas Gerais" label="Minas Gerais" />
-              <option value="São Paulo" label="São Paulo" />
-              <option value="Rio de Janeiro" label="Rio de Janeiro" />
-              <option value="Rio Grande do Sul" label="Rio Grande do Sul" />
-            </select>
+            <span>Minas Gerais</span>
           </li>
           <NavLink to="/checkout" id="shopping-cart">
             <ShoppingCart size={24} weight="fill" color="#C47F17" />

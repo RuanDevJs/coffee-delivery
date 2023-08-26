@@ -26,3 +26,9 @@ export function EXCLUDE_COFFEE_IN_SHOPPING_CART(coffee: Coffee): Dispatch {
     },
   };
 }
+
+export function CLEAR_SHOPPING_CART() {
+  return {
+    type: ActionTypes.CLEAR_SHOPPING_CART,
+  };
+}

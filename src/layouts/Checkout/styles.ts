@@ -1,4 +1,16 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
+
+const AnimateFromUpToDown = keyframes`
+  from {
+    opacity: 0;
+    transform: translate3d(0px, -30px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0px, 0px, 0);
+  }
+`;
 
 export const Container = styled.main`
   display: grid;
@@ -14,6 +26,7 @@ export const Container = styled.main`
   padding: 2rem 3rem;
 
   gap: 1rem;
+  animation: ${AnimateFromUpToDown} 0.5s forwards;
 
   h1 {
     font-family: "Baloo 2";

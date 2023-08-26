@@ -1,4 +1,7 @@
+import { ToastContainer } from "react-toastify";
 import { BrowserRouter } from "react-router-dom";
+
+import "react-toastify/dist/ReactToastify.css";
 
 import Header from "./layouts/Header";
 import Router from "./routes/index.routes";
@@ -17,6 +20,7 @@ export default function App() {
             <Global />
             <Header />
             <Router />
+            <ToastContainer />
           </div>
         </ThemeProvider>
       </BrowserRouter>

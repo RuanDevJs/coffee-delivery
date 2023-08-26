@@ -1,8 +1,9 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import {
   ShoppingContextProps,
   TotalPriceOfCoffeeInShoppingCartProps,
   Props,
+  Order,
 } from "./types";
 
 import { Coffee } from "../../reducers/Shopping/types";
@@ -11,6 +12,7 @@ import {
   ADD_COFFEE_IN_SHOPPING_CART,
   REMOVE_COFFEE_IN_SHOPPING_CART,
   EXCLUDE_COFFEE_IN_SHOPPING_CART,
+  CLEAR_SHOPPING_CART,
 } from "../../reducers/Shopping/effects";
 
 export const ShoppingContext = createContext({} as ShoppingContextProps);
@@ -22,8 +24,9 @@ export function ShoppingProvider({ children }: Props) {
       shopping_cart: [],
     },
     (initialState) => {
-      const shoppingCartFromLocalStorage =
-        localStorage.getItem("@coffee-delivery");
+      const shoppingCartFromLocalStorage = localStorage.getItem(
+        "@coffee-delivery:shopping-cart"
+      );
 
       if (shoppingCartFromLocalStorage) {
         return {
@@ -34,12 +37,30 @@ export function ShoppingProvider({ children }: Props) {
       return initialState;
     }
   );
+  const [order, setOrder] = useState<Order>(() => {
+    const orderFromLocalStorage = localStorage.getItem(
+      "@coffee-delivery:order"
+    );
+
+    if (orderFromLocalStorage) {
+      return { ...JSON.parse(orderFromLocalStorage) };
+    }
+
+    return {} as Order;
+  });
 
   const { shopping_cart } = state;
 
   useEffect(() => {
-    localStorage.setItem("@coffee-delivery", JSON.stringify(shopping_cart));
+    localStorage.setItem(
+      "@coffee-delivery:shopping-cart",
+      JSON.stringify(shopping_cart)
+    );
   }, [shopping_cart]);
+
+  useEffect(() => {
+    localStorage.setItem("@coffee-delivery:order", JSON.stringify(order));
+  }, [order]);
 
   function addCoffeeInShoppingCart(coffee: Coffee) {
     dispatch(ADD_COFFEE_IN_SHOPPING_CART(coffee));
@@ -75,14 +96,26 @@ export function ShoppingProvider({ children }: Props) {
     dispatch(EXCLUDE_COFFEE_IN_SHOPPING_CART(coffee));
   }
 
+  function setNewOrder(order: Order) {
+    setOrder(order);
+  }
+
+  function clearShoppingCart() {
+    dispatch(CLEAR_SHOPPING_CART());
+    localStorage.setItem("@coffee-delivery:shopping-cart", JSON.stringify([]));
+  }
+
   return (
     <ShoppingContext.Provider
       value={{
         shopping_cart,
+        order,
         addCoffeeInShoppingCart,
         removeCoffeeInShoppingCart,
         calculateAllCoffeesInShoppingCart,
         excludeCoffeeInShoppingCart,
+        setNewOrder,
+        clearShoppingCart,
       }}
     >
       {children}
