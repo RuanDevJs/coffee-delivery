@@ -1,16 +1,4 @@
-import styled, { Keyframes, keyframes } from "styled-components";
-
-const AnimatedQuantity = keyframes`
-  from {
-    opacity: 0;
-    transform: translate3d(0, -20px, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0 ,0);
-  }
-`;
+import styled from "styled-components";
 
 export const Container = styled.section`
   margin-top: 2rem;

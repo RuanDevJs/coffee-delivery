@@ -17,6 +17,7 @@ import * as Styled from "./styles";
 import { useTheme } from "styled-components";
 import { Order } from "../../context/Shopping/types";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 interface FormCep {
   cep: string;
@@ -37,6 +38,11 @@ interface CEP_API_RESPONSE {
 }
 
 type PaymentMethod = "credit-card" | "debit-card" | "money";
+
+const HOST = import.meta.env.VITE_API_ORDER_HOST;
+const PORT = import.meta.env.VITE_API_ORDER_PORT;
+
+const API_URL = `http://${HOST}:${PORT}/orders`;
 
 export default function Checkout() {
   const {
@@ -116,7 +122,7 @@ export default function Checkout() {
     );
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!formCep.complement.length || formCep.number === 0) {
       return toast("Preencha os restos dos dados do seu endereço 😠", {
         type: "error",
@@ -131,9 +137,13 @@ export default function Checkout() {
     };
 
     setNewOrder(newOrder);
+
+    const response = await axios.post(API_URL, newOrder);
+    console.log(response.data);
+
     clearShoppingCart();
 
-    navigation("/success");
+    navigation("/admin");
   }
 
   if (loadingFormCepFromStorage) return null;
@@ -316,7 +326,7 @@ export default function Checkout() {
             active={paymentMethod === "money"}
           >
             <Money color={theme.colors.purple} size={18} />
-            <span>cartão de dinheiro</span>
+            <span>Dinheiro</span>
           </Styled.Method>
         </Styled.Methods>
       </Styled.Payment>

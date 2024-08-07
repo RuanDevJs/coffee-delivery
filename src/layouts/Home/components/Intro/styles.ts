@@ -45,7 +45,7 @@ export const Info = styled.div`
   margin-top: 2rem;
 
   display: grid;
-  grid-template-columns: minmax(80px, auto) minmax(80px, auto);
+  grid-template-columns: minmax(80px, 300px) minmax(80px, 300px);
 
   gap: 1rem;
 `;

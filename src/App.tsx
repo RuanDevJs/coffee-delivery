@@ -11,17 +11,22 @@ import { ThemeProvider } from "styled-components";
 import theme from "./theme";
 import { ShoppingProvider } from "./context/Shopping/ShoppingContext";
 
+import { PrimeReactProvider } from "primereact/api";
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+
 export default function App() {
   return (
     <ShoppingProvider>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
-          <div className="global-grid-layout">
-            <Global />
-            <Header />
-            <Router />
-            <ToastContainer />
-          </div>
+          <PrimeReactProvider>
+            <div className="global-grid-layout">
+              <Global />
+              <Header />
+              <Router />
+              <ToastContainer />
+            </div>
+          </PrimeReactProvider>
         </ThemeProvider>
       </BrowserRouter>
     </ShoppingProvider>
